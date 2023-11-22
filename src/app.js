@@ -1,71 +1,21 @@
 // 1. Importar express
 const express = require("express");
+const geneticDiseases = require("./genetic-diseases/genetic-diseases.route.js");
 
 // 2. Const app con todas las funcionalidades de express
 const app = express();
 
+const calcularReqTime = (req, res, next) => {
+  const reqTime = new Date().toISOString();
+  req.reqTime = reqTime;
+  next();
+};
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(calcularReqTime);
 
-// Funciones de los endpoints
-const findAll = (_, res) => {
-  return res.status(200).json({
-    message: "Method get - findAll",
-  });
-};
-
-const create = (req, res) => {
-  const disease = req.body;
-
-  return res.status(200).json({
-    message: "Method post - create",
-    data: disease,
-  });
-};
-
-const findOne = (req, res) => {
-  const { id } = req.params;
-  console.log(id);
-
-  return res.status(200).json({
-    message: "Method get - findOne",
-    id,
-  });
-};
-
-const update = (req, res) => {
-  const { id } = req.params;
-  console.log(id);
-
-  return res.status(200).json({
-    message: "Method patch - update",
-    id,
-  });
-};
-
-const del = (req, res) => {
-  const { id } = req.params;
-
-  return res.status(200).json({
-    message: "Method delete - delete",
-    id,
-  });
-};
-
-// 3. Definir el endpoints
-// Buscar todas las enfermedades
-app.get("/api/v1/genetic-diseases", findAll);
-
-// Crear una enfermedad
-app.post("/api/v1/genetic-diseases", create);
-
-// Buscar una enfermedad
-app.get("/api/v1/genetic-diseases/:id", findOne);
-
-// Actualizar una enfermedad
-app.patch("/api/v1/genetic-diseases/:id", update);
-
-// Delete disease
-app.delete("/api/v1/genetic-diseases/:id", del);
+app.use("/api/v1", geneticDiseases);
 
 // 4. Poner a escuchar el servidor por un puerto
 app.listen(3000, () => {
