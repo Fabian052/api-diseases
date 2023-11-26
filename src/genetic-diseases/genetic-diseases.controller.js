@@ -19,14 +19,14 @@ const create = (req, res) => {
 };
 
 const findOne = (req, res) => {
-  const { reqTime } = req;
+  const { reqTime, saludar } = req;
   const { id } = req.params;
-  console.log(id);
 
   return res.status(200).json({
     message: "Method get - findOne",
     id,
     reqTime,
+    saludar,
   });
 };
 
